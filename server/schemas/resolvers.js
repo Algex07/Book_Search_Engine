@@ -15,7 +15,7 @@ const resolvers = {
 
     Mutation: {
         login: async (parent, { email, password }) => {
-            const user = await User.findOne({ $or: [{ username: body.username }, { email: body.email }] });
+            const user = await User.findOne({ email});
             if (!user) {
               throw new AuthenticationError('No user found with this email!');
             }
@@ -33,13 +33,15 @@ const resolvers = {
         return { token, user };
         },
 
-        saveBook: async (parent, { input }, context) => {
+        saveBook: async (parent, { bookData }, context) => {
+          
             if (context.user) {
-                const updatedUser = await User.findOneAndUpdate(
+                const updatedUser = await User.findByIdAndUpdate(
                     { _id: context.user._id },
-                    { $push: { savedBooks: input } },
+                    { $push: { savedBooks: bookData } },
                     { new: true }
                 );
+                console.log(updatedUser)
                 return updatedUser
             }
             throw new AuthenticationError('You need to be logged in!');

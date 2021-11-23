@@ -15,9 +15,9 @@ const server = new ApolloServer({
 
 });
 
-server.start({
-  cors:{credentials:true,origin:[process.env.FRONTEND_URL,process.env.BACKED_URL,process.env.PLAYGROUND_URL]},
-})
+// server.start({
+//   cors:{credentials:true,origin:[process.env.FRONTEND_URL,process.env.BACKED_URL,process.env.PLAYGROUND_URL]},
+// })
 
 server.applyMiddleware({ app})
 
@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
 }
 
-// app.use(routes);
+app.use(routes);
 
 db.once('open', () => {
 app.listen(PORT, () => {
